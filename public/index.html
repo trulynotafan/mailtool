@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Processor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Contact Processor</h1>
+    
+    <div class="form-group">
+        <label for="fileInput">Upload JSON File:</label>
+        <input type="file" id="fileInput" accept=".json">
+    </div>
+
+    <div id="fileInfo"></div>
+
+    <button id="processButton" disabled>Process Contacts</button>
+
+    <div id="results"></div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const processButton = document.getElementById('processButton');
+        const results = document.getElementById('results');
+        let jsonData = null;
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            handleFile(file);
+        });
+
+        function handleFile(file) {
+            if (file && file.type === 'application/json') {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        jsonData = JSON.parse(e.target.result);
+                        fileInfo.innerHTML = `
+                            <p>File loaded: ${file.name}</p>
+                            <pre style="background: #f5f5f5; padding: 10px; overflow: auto; max-height: 200px;">
+                                ${JSON.stringify(jsonData, null, 2)}
+                            </pre>
+                        `;
+                        processButton.disabled = false;
+                    } catch (error) {
+                        console.error('JSON parsing error:', error);
+                        fileInfo.innerHTML = `<p style="color: red;">Error: Invalid JSON file</p>`;
+                        processButton.disabled = true;
+                    }
+                };
+                reader.readAsText(file);
+            } else {
+                fileInfo.innerHTML = `<p style="color: red;">Please select a JSON file</p>`;
+                processButton.disabled = true;
+            }
+        }
+
+        processButton.addEventListener('click', async () => {
+            if (!jsonData) return;
+
+            processButton.disabled = true;
+            results.innerHTML = '<p>Processing contacts...</p>';
+
+            try {
+                const response = await fetch('/process-contacts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonData)
+                });
+
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error || 'Failed to process contacts');
+                }
+
+                let resultsHtml = `<h2>Results:</h2>`;
+                resultsHtml += `<p>Total contacts processed: ${data.totalProcessed || 0}</p>`;
+
+                if (!data.results || data.results.length === 0) {
+                    resultsHtml += `
+                        <div class="status warning">
+                            No valid contacts were found to process.
+                            Make sure your JSON contains contacts with valid email addresses.
+                        </div>
+                    `;
+                } else {
+                    data.results.forEach(result => {
+                        const statusClass = result.status === 'success' ? 'success' : 'error';
+                        resultsHtml += `
+                            <div class="status ${statusClass}">
+                                <strong>Business:</strong> ${result.businessName || 'N/A'}<br>
+                                <strong>Email:</strong> ${result.contact}<br>
+                                <strong>Type:</strong> ${result.businessType || 'N/A'}<br>
+                                <strong>Status:</strong> ${result.status}
+                                ${result.error ? `<br><strong>Error:</strong> ${result.error}` : ''}
+                            </div>
+                        `;
+                    });
+                }
+
+                results.innerHTML = resultsHtml;
+            } catch (error) {
+                console.error('Error:', error);
+                results.innerHTML = `
+                    <div class="status error">
+                        <strong>Error:</strong> ${error.message}
+                    </div>
+                `;
+            } finally {
+                processButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html> 
