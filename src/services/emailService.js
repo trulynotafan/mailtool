@@ -63,7 +63,7 @@ class EmailService {
                 this.emailCount++;
                 
                 // Add random delay between emails (2-5 seconds)
-                const delay = Math.floor(Math.random() * (5000 - 2000 + 1) + 2000);
+                const delay = 30000;
                 await new Promise(resolve => setTimeout(resolve, delay));
                 
                 return result;
