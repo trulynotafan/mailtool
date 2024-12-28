@@ -22,6 +22,7 @@ class AIService {
             - Include forgeweb.uk as the website reference
             - Keep it concise (2-3 short paragraphs)
             - End with a clear call to action to visit forgeweb.uk
+            - If you can't find the name in my prompt use Words like dear sir or madam or business owner but dont use placeholders in the generated email, the email must be perfect and ready to send without any further chnages.
 
             Make it sound natural and conversational, not like a template.`;
 
