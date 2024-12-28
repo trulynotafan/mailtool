@@ -5,10 +5,11 @@ class ContactProcessor {
         // Detailed logging of incoming contact
         console.log('Raw contact data:', JSON.stringify(contact, null, 2));
 
-        // Extract required fields
-        const email = contact.email;
+        // Extract required fields from the nested structure
+        const email = contact.contact?.email;
         const name = contact.name;
         const type = contact.type;
+        const phone = contact.contact?.phone || '';
 
         console.log('Extracted values:', {
             email: email || 'NOT FOUND',
@@ -16,6 +17,7 @@ class ContactProcessor {
             type: type || 'NOT FOUND'
         });
 
+        // Ensure both name and email are present for a valid contact
         const isValid = Boolean(name && email);
         console.log('Is valid?:', isValid);
 
@@ -25,7 +27,7 @@ class ContactProcessor {
                 name: name,
                 email: email,
                 type: type,
-                phone: contact.phone || ''
+                phone: phone
             }
         };
 
