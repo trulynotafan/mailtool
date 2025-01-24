@@ -20,8 +20,8 @@ A simple utility that takes a JSON file with customer data and sends personalize
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/trulynotafan/mailtoolWh
-   cd json-email-tool
+   git clone https://github.com/trulynotafan/mailtool
+   cd mailtool
    ```
 
 2. Install dependencies:
