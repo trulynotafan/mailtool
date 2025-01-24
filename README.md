@@ -72,4 +72,4 @@ MIT License - free to use and modify.
 
 This tool is designed for basic email automation and is not intended for advanced workflows or large-scale campaigns.
 
-You can find the json files by using the other tool called Business Finder which is availble [here](https://github.com/trulynotafan/Business_Finder) 
+You can find the json files by using the other tool called Business Finder which is available [here](https://github.com/trulynotafan/Business_Finder) 
